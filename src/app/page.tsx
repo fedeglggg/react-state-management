@@ -8,7 +8,7 @@ export default function Home() {
       </h1>
       <a href='/useState'> Go to useState</a>
       <a href='/useContext'> Go to useContext</a>
-      <a href='/useState'> Go to useReducer</a>
+      <a href='/useReducer'> Go to useReducer</a>
     </main>
   )
 }

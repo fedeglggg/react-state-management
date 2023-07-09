@@ -4,16 +4,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState, useContext, Key } from 'react';
-import { RowsContext } from "./page"
+import { useState, Key } from 'react';
 
-export default function AlertDialog() {
+export default function AlertDialog({state, dispatch}: {state:any, dispatch:any}) {
   const [open, setOpen] = useState(false);
-
-  const {
-    rows,
-    setRows
-  } = useContext(RowsContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,10 +34,9 @@ export default function AlertDialog() {
           {"Rows"}
         </DialogTitle>
         <DialogContent>
-          {rows.map((node: any, index:Key) => {
+          {state?.map((node: any, index:Key) => {
             return <DialogContentText key={index} id="alert-dialog-description">
-              <button key={index} onClick={() => setRows((currentRows:any) => 
-                currentRows.filter((currentRow:any) => node.id !== currentRow.id))}> 
+              <button key={index} onClick={() => dispatch({ type: "removeRow", rowId: node.id })}> 
                 Remove 
               </button>
               {" "}

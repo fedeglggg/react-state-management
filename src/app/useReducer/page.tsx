@@ -1,38 +1,38 @@
 "use client"
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { rows as fetchedRows } from "./data.js"
 import AlertDialog from './modal';
 import Datagrid from './datagrid';
 
-type contextType = {
-  rows: any;
-  setRows: any;
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case "cleanRows":
+      return []
+    case "removeRow":
+      const rows = [...state]
+      return rows.filter((node) => node.id !== action.rowId)
+    case "setRows":
+      return action.data
+    default:
+      return []
+  }
 }
-
-type rowType = {
-  id: number;
-  lastName: string;
-  firstName: string | null;
-  age: number | null;
-};
-
-export const RowsContext = createContext<contextType>({ rows: null, setRows: null });
 
 /* Partiendo de una lista  */
 export default function Page() {
-  const [rows, setRows] = useState<rowType[]>([]);
+  const [state, dispatch] = useReducer(reducer, []);
 
   useEffect(() => {
     /* Simulo fetch en effect */
-    setRows(fetchedRows)
+    dispatch({ type: "setRows", data: fetchedRows})
   }, [])
 
   console.log("Rendered Page")
 
   return (
-    <RowsContext.Provider value={{rows, setRows}}>
-      <Datagrid />
-      <AlertDialog />
-    </RowsContext.Provider>
+      <>
+        <Datagrid state={state} dispatch={dispatch} />
+        <AlertDialog state={state} dispatch={dispatch} />
+      </>
   )
 } 

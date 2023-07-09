@@ -1,18 +1,13 @@
 "use client"
-import { useContext } from 'react';
 import { columns as baseColumns } from "./data.js"
-import { RowsContext } from "./page.jsx"
 import { DataGrid as DataGridMui } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 
 /* Partiendo de una lista  */
-export default function Datagrid() {
-  const {
-    rows,
-    setRows
-  } = useContext(RowsContext);
+export default function Datagrid({state, dispatch}: {state:any, dispatch:any}) {
+
 
   console.log("Rendered Datagrid")
 
@@ -31,9 +26,7 @@ export default function Datagrid() {
           style={{ marginLeft: 16 }}
           tabIndex={params.hasFocus ? 0 : -1}
           onClick={() => {
-            setRows((currentRows: any) => 
-              currentRows.filter((node:any) => node.id !== params.id)
-            )
+            dispatch({ type: "removeRow", rowId: params.id})
           }}
         >
           Remove  
@@ -45,7 +38,7 @@ export default function Datagrid() {
   return (
     <Box sx={{ height: 500, maxWidth: 900 }}>
       <DataGridMui
-        rows={rows}
+        rows={state}
         columns={columns}
         checkboxSelection />
     </Box>
